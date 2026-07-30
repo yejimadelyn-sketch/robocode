@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Play, SquareTerminal, Image as ImageIcon, Loader2, Bot, X, Send } from 'lucide-react';
+import Editor from '@monaco-editor/react';
+import toast from 'react-hot-toast';
 
 const ScriptRunnerPage = () => {
   const [code, setCode] = useState('# Write or paste your Python code here\nprint("Hello from Python!")\n');
@@ -67,14 +69,22 @@ const ScriptRunnerPage = () => {
 
       const data = await response.json();
       
-      if (data.stdout) setLogs(data.stdout);
-      if (data.stderr) setErrorLogs(data.stderr);
+      if (data.stdout) {
+        setLogs(data.stdout);
+        toast.success('Script executed successfully!');
+      }
+      if (data.stderr) {
+        setErrorLogs(data.stderr);
+        toast.error('Script finished with errors');
+      }
       if (data.html) setHtmlOutput(data.html);
       if (data.images && data.images.length > 0) {
         setImages(data.images);
+        toast.success(`Generated ${data.images.length} plot(s)!`);
       }
     } catch (error) {
       setErrorLogs(`Error connecting to the backend: ${error.message}`);
+      toast.error('Backend connection failed');
     } finally {
       setIsLoading(false);
     }
@@ -96,13 +106,21 @@ const ScriptRunnerPage = () => {
             {isLoading ? 'Running...' : 'Run Script'}
           </button>
         </div>
-        <div className="panel-body">
-          <textarea
-            className="code-editor"
+        <div className="panel-body" style={{ padding: 0 }}>
+          <Editor
+            height="100%"
+            defaultLanguage="python"
             value={code}
-            onChange={(e) => setCode(e.target.value)}
-            spellCheck="false"
-            placeholder="print('Hello World')"
+            onChange={(value) => setCode(value)}
+            theme="vs-dark"
+            options={{
+              minimap: { enabled: false },
+              fontSize: 14,
+              fontFamily: "'Fira Code', 'Courier New', monospace",
+              padding: { top: 16 },
+              smoothScrolling: true,
+              cursorBlinking: "smooth",
+            }}
           />
         </div>
       </div>
