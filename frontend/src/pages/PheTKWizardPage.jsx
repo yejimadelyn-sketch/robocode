@@ -34,12 +34,35 @@ const PheTKWizardPage = () => {
     let filename = '';
     if (type === 'pheno') {
       filename = 'sample_phenotype_ICD.csv';
-      content = 'person_id,ICD\\nP-1001,250.0\\nP-1001,401.1\\nP-1002,250.0\\nP-1003,401.1\\nP-1004,272.0\\nP-1005,250.0\\nP-1006,401.1\\nP-1007,272.0\\nP-1008,250.0';
+      const rows = [
+        'person_id,ICD',
+        '1001,250.0',
+        '1001,401.1',
+        '1002,250.0',
+        '1003,401.1',
+        '1004,272.0',
+        '1005,250.0',
+        '1006,401.1',
+        '1007,272.0',
+        '1008,250.0'
+      ];
+      content = rows.join('\r\n');
     } else {
       filename = 'sample_cohort_demographics.csv';
-      content = 'person_id,age,sex,independent_variable_of_interest\\nP-1001,45,M,1\\nP-1002,52,F,0\\nP-1003,61,F,1\\nP-1004,39,M,1\\nP-1005,50,F,0\\nP-1006,48,M,1\\nP-1007,55,F,0\\nP-1008,44,M,1';
+      const rows = [
+        'person_id,age,sex,independent_variable_of_interest',
+        '1001,45,1,1',
+        '1002,52,0,0',
+        '1003,61,0,1',
+        '1004,39,1,1',
+        '1005,50,0,0',
+        '1006,48,1,1',
+        '1007,55,0,0',
+        '1008,44,1,1'
+      ];
+      content = rows.join('\r\n');
     }
-    const blob = new Blob([content], { type: 'text/csv' });
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -117,7 +140,8 @@ const PheTKWizardPage = () => {
       
       setStep(prev => prev + 1);
     } catch (err) {
-      setError(err.message);
+      const detailedError = err.response && err.response.data ? (err.response.data.details || err.response.data.error) : err.message;
+      setError(detailedError || err.message);
     } finally {
       setLoading(false);
     }

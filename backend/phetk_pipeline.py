@@ -2,6 +2,17 @@ import argparse
 import polars as pl
 import os
 import sys
+import io
+
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
+# Polars 1.x compatibility shims for PheTK
+if not hasattr(pl.DataFrame, 'groupby'):
+    pl.DataFrame.groupby = pl.DataFrame.group_by
+if not hasattr(pl.Expr, 'map_dict'):
+    pl.Expr.map_dict = lambda self, mapping, default=None: self.replace(mapping) if default is None else self.replace_strict(mapping, default=default)
 
 def run_map(args):
     print(f"Running Mapping Step on {args.pheno_file}...")
@@ -68,18 +79,43 @@ def run_stats(args):
         if args.id_col != "person_id":
             cohort = cohort.rename({args.id_col: "person_id"})
             
+        # Identify sex column and convert M/F strings to 1/0 integers
+        sex_col = "sex"
+        for col in ["sex", "gender", "sex_at_birth", "Sex", "Gender"]:
+            if col in cohort.columns:
+                sex_col = col
+                break
+        if sex_col not in cohort.columns:
+            cohort = cohort.with_columns(pl.lit(1).alias(sex_col))
+            
+        # Convert string gender M/F to 1/0 if needed
+        if cohort[sex_col].dtype == pl.Utf8:
+            cohort = cohort.with_columns(
+                pl.when(pl.col(sex_col).str.to_uppercase().str.starts_with("M"))
+                .then(1)
+                .otherwise(0)
+                .alias(sex_col)
+            )
+        cohort = cohort.with_columns([
+            pl.col("person_id").cast(pl.Int64, strict=False),
+            pl.col(sex_col).cast(pl.Int64, strict=False)
+        ])
+            
         temp_cohort = "temp_stats_cohort.csv"
         cohort.write_csv(temp_cohort)
         
-        covariates = args.covariates.split(',') if args.covariates else []
+        covariates = [c.strip() for c in args.covariates.split(',') if c.strip() and c.strip() in cohort.columns]
+        if sex_col in covariates:
+            covariates.remove(sex_col)
         
         phewas = PheWAS(
             cohort_csv_path=temp_cohort,
             phecode_count_csv_path=args.phecode_file,
             phecode_version="X",
+            sex_at_birth_col=sex_col,
             covariate_cols=covariates,
             independent_variable_of_interest=args.independent_var,
-            min_cases=10, # Lower for demo purposes
+            min_cases=1,
             min_phecode_count=1,
             output_file_name=args.output_file,
             verbose=True
