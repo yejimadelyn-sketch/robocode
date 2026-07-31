@@ -119,7 +119,6 @@ const LandingPage = () => {
           An all-in-one educational platform and professional data science suite. 
           Learn the fundamentals of Python programming, write scripts in a world-class editor, and execute massive Phenome-Wide Association Studies instantly.
         </p>
-        
         {/* Beginner Explanations Banner */}
         <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '1rem', padding: '1.5rem', maxWidth: '900px', margin: '0 auto 2.5rem auto', textAlign: 'left', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
           <div>
@@ -129,10 +128,6 @@ const LandingPage = () => {
           <div>
             <h4 style={{ margin: '0 0 0.5rem 0', color: 'var(--accent-color)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>🧬 What is PheWAS?</h4>
             <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5' }}>A <i>Phenome-Wide Association Study</i>. It lets scientists analyze if a single variable (like a gene mutation) is connected to thousands of different human illnesses.</p>
-          </div>
-          <div>
-            <h4 style={{ margin: '0 0 0.5rem 0', color: '#3b82f6', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>🏥 What is an EHR?</h4>
-            <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5' }}>An <i>Electronic Health Record</i> is the digital database that hospitals use to track patient medical histories, prescriptions, lab tests, and diagnoses.</p>
           </div>
         </div>
 

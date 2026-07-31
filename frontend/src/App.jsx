@@ -6,7 +6,6 @@ import LandingPage from './pages/LandingPage';
 import ScriptRunnerPage from './pages/ScriptRunnerPage';
 import LearnPage from './pages/LearnPage';
 import PheTKWizardPage from './pages/PheTKWizardPage';
-import EhrDashboardPage from './pages/EhrDashboardPage';
 import './index.css';
 
 function App() {
@@ -37,7 +36,6 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/learn" element={<LearnPage />} />
-            <Route path="/dashboard" element={<EhrDashboardPage />} />
             <Route path="/runner" element={<ScriptRunnerPage />} />
             <Route path="/phetk-wizard" element={<PheTKWizardPage />} />
           </Routes>
