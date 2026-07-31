@@ -21,7 +21,7 @@ const Header = ({ isDark, setIsDark }) => {
           {isDark ? <Sun size={20} /> : <Moon size={20} />}
         </SoundButton>
 
-        <SoundLink to="/learn" className="btn btn-primary" style={{ padding: '0.5rem 1.25rem', color: 'white' }}>
+        <SoundLink to="/runner" className="btn btn-primary" style={{ padding: '0.5rem 1.25rem', color: 'white' }}>
           Launch Editor
         </SoundLink>
       </div>

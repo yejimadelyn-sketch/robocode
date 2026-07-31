@@ -120,7 +120,7 @@ const LandingPage = () => {
           Learn the fundamentals of Python programming, write scripts in a world-class editor, and build amazing projects instantly.
         </p>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <SoundLink to="/learn" className="btn btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>
+          <SoundLink to="/runner" className="btn btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>
             Open Code Editor <ChevronRight size={20} />
           </SoundLink>
         </div>
@@ -157,7 +157,7 @@ const LandingPage = () => {
           <p style={{ marginBottom: '1.5rem', lineHeight: 1.6 }}>
             Our web-based Code Editor is powered by the exact same engine as VS Code. It features real-time syntax highlighting, intelligent auto-complete, and a built-in AI debugging assistant to help you learn Python faster and write better scripts.
           </p>
-          <SoundLink to="/learn" className="btn" style={{ width: '100%', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
+          <SoundLink to="/runner" className="btn" style={{ width: '100%', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
             Launch Editor
           </SoundLink>
         </motion.div>

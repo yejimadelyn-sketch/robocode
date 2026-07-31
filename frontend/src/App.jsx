@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Header from './components/Header';
 import LandingPage from './pages/LandingPage';
+import ScriptRunnerPage from './pages/ScriptRunnerPage';
 import LearnPage from './pages/LearnPage';
 import './index.css';
 
@@ -34,6 +35,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/learn" element={<LearnPage />} />
+            <Route path="/runner" element={<ScriptRunnerPage />} />
           </Routes>
         </main>
       </div>
