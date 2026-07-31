@@ -1,209 +1,106 @@
-import React, { useState } from 'react';
-import { BookOpen, Copy, CheckCircle2, ChevronRight, Play, Lightbulb } from 'lucide-react';
-import { SoundButton, SoundLink } from '../components/SoundButton';
+import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
+import { api } from '../services/api';
+import LessonSidebar from '../components/LessonSidebar';
+import CodeEditor from '../components/CodeEditor';
+import OutputConsole from '../components/OutputConsole';
 
-const CodeSnippet = ({ title, code }) => {
-  const [copied, setCopied] = useState(false);
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+const LESSONS = [
+  {
+    title: "1. Hello World",
+    starterCode: "# Let's print a message to the console\nprint(\"Hello from RoboCode!\")\n\n# Try changing the message and click Run Code!\n"
+  },
+  {
+    title: "2. Variables & Basic Math",
+    starterCode: "# Math is easy in Python\nx = 10\ny = 5\n\n# Variables can be added together\nresult = x + y\nprint(f\"{x} plus {y} is {result}\")\n"
+  },
+  {
+    title: "3. Working with Lists",
+    starterCode: "# Create a list of planets\nplanets = [\"Earth\", \"Mars\", \"Jupiter\"]\n\n# Add a new planet\nplanets.append(\"Saturn\")\n\n# Loop through the list\nfor planet in planets:\n    print(f\"Welcome to {planet}!\")\n"
+  },
+  {
+    title: "4. Functions",
+    starterCode: "# Define a function to greet a user\ndef greet_user(name):\n    print(f\"Hello, {name}! Welcome to Python programming.\")\n\n# Call the function\ngreet_user(\"Alice\")\ngreet_user(\"Bob\")\n"
+  },
+  {
+    title: "5. Dictionaries",
+    starterCode: "# Dictionaries store data in key-value pairs\nstudent = {\n    \"name\": \"Alice\",\n    \"age\": 22,\n    \"major\": \"Computer Science\"\n}\n\nprint(f\"{student['name']} is {student['age']} years old.\")\n"
+  }
+];
+
+const LearnPage = () => {
+  const [activeLessonIndex, setActiveLessonIndex] = useState(0);
+  const [code, setCode] = useState(LESSONS[0].starterCode);
+  const [logs, setLogs] = useState('');
+  const [errorLogs, setErrorLogs] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Load starter code when lesson changes
+  useEffect(() => {
+    setCode(LESSONS[activeLessonIndex].starterCode);
+    setLogs('');
+    setErrorLogs('');
+  }, [activeLessonIndex]);
+
+  const handleRunScript = async () => {
+    setIsLoading(true);
+    setLogs('');
+    setErrorLogs('');
+
+    try {
+      const data = await api.runScript(code);
+      
+      if (data.stdout) {
+        setLogs(data.stdout);
+        toast.success('Code executed successfully!');
+      }
+      if (data.stderr) {
+        setErrorLogs(data.stderr);
+        toast.error('Code finished with errors');
+      }
+    } catch (error) {
+      setErrorLogs(`Error connecting to the backend: ${error.message}`);
+      toast.error('Backend connection failed');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="glass-card" style={{ padding: 0, marginBottom: '2rem', overflow: 'hidden' }}>
-      <div style={{ padding: '0.5rem 1rem', background: '#334155', borderBottom: '1px solid #475569', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h3 style={{ margin: 0, fontSize: '0.9rem', color: '#f1f5f9' }}>{title}</h3>
-        <SoundButton 
-          onClick={copyToClipboard}
-          style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.8rem' }}
-        >
-          {copied ? <CheckCircle2 size={14} color="#10b981" /> : <Copy size={14} />}
-          {copied ? 'Copied!' : 'Copy'}
-        </SoundButton>
+    <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '2rem', height: 'calc(100vh - 80px)', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ marginBottom: '2rem' }}>
+        <h1 style={{ margin: 0, fontSize: '2rem' }}>Interactive <span className="text-gradient">Python Curriculum</span></h1>
+        <p style={{ color: 'var(--text-secondary)', margin: '0.5rem 0 0 0' }}>Select a lesson, write your code, and see the results instantly.</p>
       </div>
-      <div className="code-editor" style={{ background: 'rgba(255,255,255,0.8)', padding: '1rem', overflowX: 'auto' }}>
-        <pre style={{ margin: 0, fontFamily: 'monospace' }}>{code}</pre>
-      </div>
-    </div>
-  );
-};
 
-const LearnPage = () => {
-  const [activeLesson, setActiveLesson] = useState(0);
-
-  const lessons = [
-    { title: "1. Hello World & Math" },
-    { title: "2. Variables and Lists" },
-    { title: "3. Data Science with Pandas" },
-    { title: "4. Advanced: PheWAS Analysis (PheTK)" }
-  ];
-
-  return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '3rem 2rem' }}>
-      <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-        <div className="feature-icon" style={{ margin: '0 auto 1.5rem auto' }}>
-          <BookOpen size={28} />
+      <div style={{ display: 'grid', gridTemplateColumns: '250px 1fr 1fr', gap: '1.5rem', flex: 1, minHeight: 0 }}>
+        {/* Sidebar */}
+        <div className="glass-card" style={{ padding: '1rem', overflow: 'hidden' }}>
+          <LessonSidebar 
+            lessons={LESSONS} 
+            activeLessonIndex={activeLessonIndex} 
+            onSelectLesson={setActiveLessonIndex} 
+          />
         </div>
-        <h1 className="hero-title" style={{ fontSize: '3rem' }}>
-          Learn <span className="text-gradient">Python Basics</span>
-        </h1>
-        <p className="hero-subtitle" style={{ margin: '0 auto' }}>
-          Welcome to your first steps in Python! Here are some basic concepts you can try right now in RoboCode.
-        </p>
-      </div>
 
-      <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '3rem' }}>
-        <SoundLink to="/runner" className="btn btn-primary">
-          <Play size={18} /> Open Editor to Practice
-        </SoundLink>
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '3rem' }}>
-        {lessons.map((lesson, index) => (
-          <SoundButton
-            key={index}
-            onClick={() => setActiveLesson(index)}
-            style={{
-              padding: '1rem',
-              textAlign: 'left',
-              background: activeLesson === index ? 'var(--bg-secondary)' : 'transparent',
-              border: '1px solid',
-              borderColor: activeLesson === index ? 'var(--accent-color)' : 'transparent',
-              borderRadius: '999px',
-              color: activeLesson === index ? 'var(--accent-color)' : 'var(--text-primary)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease'
-            }}
-          >
-            <span style={{ fontWeight: activeLesson === index ? 600 : 400 }}>{lesson.title}</span>
-            {activeLesson === index && <ChevronRight size={16} />}
-          </SoundButton>
-        ))}
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-          <Lightbulb color="var(--accent-color)" />
-          <h2 style={{ margin: 0 }}>1. Hello World & Math</h2>
+        {/* Editor */}
+        <div style={{ overflow: 'hidden' }}>
+          <CodeEditor 
+            code={code}
+            setCode={setCode}
+            onRun={handleRunScript}
+            isLoading={isLoading}
+          />
         </div>
-        <p style={{ color: 'var(--text-secondary)' }}>
-          Python is great for simple math and printing text to the screen.
-        </p>
-        <CodeSnippet 
-          title="Print and Math" 
-          code={`# Let's print a message
-print("Hello from RoboCode!")
 
-# Math is easy in Python
-x = 10
-y = 5
-print(f"10 plus 5 is {x + y}")`}
-        />
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-          <Lightbulb color="var(--accent-color)" />
-          <h2 style={{ margin: 0 }}>2. Variables and Lists</h2>
+        {/* Console */}
+        <div style={{ overflow: 'hidden' }}>
+          <OutputConsole 
+            logs={logs}
+            errorLogs={errorLogs}
+            isLoading={isLoading}
+          />
         </div>
-        <p style={{ color: 'var(--text-secondary)' }}>
-          You can store data in variables and create lists of items.
-        </p>
-        <CodeSnippet 
-          title="Working with Lists" 
-          code={`# Create a list of planets
-planets = ["Earth", "Mars", "Jupiter"]
-
-# Add a new planet
-planets.append("Saturn")
-
-# Loop through the list
-for planet in planets:
-    print(f"Welcome to {planet}!")`}
-        />
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-          <Lightbulb color="var(--accent-color)" />
-          <h2 style={{ margin: 0 }}>3. Data Science with Pandas</h2>
-        </div>
-        <p style={{ color: 'var(--text-secondary)' }}>
-          RoboCode supports rich HTML rendering for Pandas tables. Try this out!
-        </p>
-        <CodeSnippet 
-          title="Pandas DataFrame" 
-          code={`import pandas as pd
-
-# Create a dictionary of data
-data = {
-    'Name': ['Alice', 'Bob', 'Charlie'],
-    'Age': [25, 30, 35],
-    'City': ['New York', 'London', 'Paris']
-}
-
-# Create a DataFrame
-df = pd.DataFrame(data)
-
-# Put the variable at the end to render it beautifully!
-df`}
-        />
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-          <Lightbulb color="var(--accent-color)" />
-          <h2 style={{ margin: 0 }}>4. Advanced: PheWAS Analysis (PheTK)</h2>
-        </div>
-        <p style={{ color: 'var(--text-secondary)' }}>
-          Run Phenome Wide Association Studies directly in the browser! Copy and run these cells one by one.
-        </p>
-        <CodeSnippet 
-          title="Cell 1: Create Demo Input" 
-          code={`from PheTK.Demo import generate_examples
-
-# Create demo input files for analysis
-print("Generating demo data...")
-generate_examples(var_type="binary", data_has_both_sexes=True)
-print("Data generation complete!")`}
-        />
-        <CodeSnippet 
-          title="Cell 2: Run PheWAS Analysis" 
-          code={`from PheTK.PheWAS import PheWAS
-
-print("Starting PheWAS analysis...")
-phewas = PheWAS(
-    cohort_csv_path="example_cohort.csv",
-    phecode_count_csv_path="example_phecode_counts.csv",
-    phecode_version="X",
-    sex_at_birth_col="sex",
-    covariate_cols=["age", "sex", "pc1", "pc2", "pc3"],
-    independent_variable_of_interest="independent_variable_of_interest",
-    min_cases=50,
-    min_phecode_count=2,
-    output_file_name="example_phewas_results.csv",
-    verbose=True
-)
-
-phewas.run()
-print("Analysis complete!")`}
-        />
-        <CodeSnippet 
-          title="Cell 3: Show the Results" 
-          code={`import polars as pl
-
-# Load the results and display the top 10 most significant associations
-results = pl.read_csv("example_phewas_results.csv", dtypes={"phecode": str})
-top_results = results.sort(by="p_value").head(10)
-
-# Render it beautifully
-top_results`}
-        />
-      </div>
-
-      <div style={{ textAlign: 'center', marginTop: '4rem', padding: '2rem', background: 'var(--bg-card)', borderRadius: '1rem' }}>
-        <img src="/robot.png" alt="Robot" style={{ width: '80px', animation: 'floatSmall 4s ease-in-out infinite', filter: 'drop-shadow(var(--glow))' }} />
-        <h3>Ready to build amazing things?</h3>
-        <p style={{ color: 'var(--text-secondary)' }}>Head over to the Script Runner and let your imagination run wild.</p>
       </div>
     </div>
   );

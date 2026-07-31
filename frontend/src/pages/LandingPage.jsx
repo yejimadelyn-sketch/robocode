@@ -85,8 +85,8 @@ const HowToUseSection = () => (
       <div className="glass-card" style={{ padding: '2rem', display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
         <div style={{ background: 'var(--accent-gradient)', color: 'white', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '1.2rem', flexShrink: 0 }}>3</div>
         <div>
-          <h3 style={{ margin: '0 0 0.5rem 0' }}>Run Advanced Analytics</h3>
-          <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.6 }}>Use the no-code PheTK Wizard to upload CSV files, automatically translate ICD codes, and generate professional Manhattan plots instantly.</p>
+          <h3 style={{ margin: '0 0 0.5rem 0' }}>Build Applications</h3>
+          <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.6 }}>Use the interactive output console to view your code's results instantly. Build real applications right in your browser.</p>
         </div>
       </div>
     </div>
@@ -113,18 +113,15 @@ const LandingPage = () => {
           </span>
         </div>
         <h1 className="hero-title">
-          Master Python & <span className="text-gradient">PheWAS Analysis</span>
+          Master Python <span className="text-gradient">Programming</span>
         </h1>
         <p className="hero-subtitle">
-          An all-in-one educational platform and professional data science suite. 
-          Learn the fundamentals of Python programming, write scripts in a world-class editor, and execute massive Phenome-Wide Association Studies instantly.
+          An all-in-one educational platform. 
+          Learn the fundamentals of Python programming, write scripts in a world-class editor, and build amazing projects instantly.
         </p>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <SoundLink to="/runner" className="btn btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>
+          <SoundLink to="/learn" className="btn btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>
             Open Code Editor <ChevronRight size={20} />
-          </SoundLink>
-          <SoundLink to="/phetk-wizard" className="btn btn-secondary" style={{ padding: '1rem 2rem', fontSize: '1.1rem', background: 'var(--bg-card)' }}>
-            Launch PheTK Wizard
           </SoundLink>
         </div>
       </motion.div>
@@ -143,12 +140,12 @@ const LandingPage = () => {
           <div className="feature-icon" style={{ background: 'var(--accent-gradient)' }}>
             <Activity size={24} />
           </div>
-          <h3>The PheTK Wizard</h3>
+          <h3>Interactive Challenges</h3>
           <p style={{ marginBottom: '1.5rem', lineHeight: 1.6 }}>
-            Execute complex statistical biology algorithms without writing a single line of code. Our visual 4-step wizard connects directly to our Python backend to translate raw ICD codes into standardized Phecodes, perform multithreaded logistic regression, and generate beautiful Manhattan plots.
+            Test your knowledge with hands-on coding challenges. Write algorithms to solve problems directly in the browser and get immediate feedback on your performance.
           </p>
-          <SoundLink to="/phetk-wizard" className="btn" style={{ width: '100%', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
-            Start Analysis
+          <SoundLink to="/learn" className="btn" style={{ width: '100%', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
+            Start Learning
           </SoundLink>
         </motion.div>
 
@@ -160,7 +157,7 @@ const LandingPage = () => {
           <p style={{ marginBottom: '1.5rem', lineHeight: 1.6 }}>
             Our web-based Code Editor is powered by the exact same engine as VS Code. It features real-time syntax highlighting, intelligent auto-complete, and a built-in AI debugging assistant to help you learn Python faster and write better scripts.
           </p>
-          <SoundLink to="/runner" className="btn" style={{ width: '100%', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
+          <SoundLink to="/learn" className="btn" style={{ width: '100%', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
             Launch Editor
           </SoundLink>
         </motion.div>
@@ -171,7 +168,7 @@ const LandingPage = () => {
           </div>
           <h3>Interactive Curriculum</h3>
           <p style={{ marginBottom: '1.5rem', lineHeight: 1.6 }}>
-            Whether you are a complete beginner to variables and loops, or a seasoned researcher looking to learn the `PheTK` Python library programmatically, our Interactive Learning Center provides copy-pasteable lessons to accelerate your learning.
+            Whether you are a complete beginner to variables and loops, or a seasoned programmer looking to learn general Python programming, our Interactive Learning Center provides copy-pasteable lessons to accelerate your learning.
           </p>
           <SoundLink to="/learn" className="btn" style={{ width: '100%', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
             View Curriculum

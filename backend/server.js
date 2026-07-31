@@ -177,75 +177,7 @@ app.post('/api/chat', async (req, res) => {
     }
 });
 
-// -----------------------------------------------------------------
-// PHETK PIPELINE ENDPOINTS
-// -----------------------------------------------------------------
 
-app.post('/api/phetk/upload', upload.fields([{ name: 'phenoFile', maxCount: 1 }, { name: 'cohortFile', maxCount: 1 }]), (req, res) => {
-    try {
-        const phenoFile = req.files['phenoFile'] ? req.files['phenoFile'][0].filename : null;
-        const cohortFile = req.files['cohortFile'] ? req.files['cohortFile'][0].filename : null;
-        
-        res.json({
-            success: true,
-            phenoFilePath: phenoFile ? path.join(TEMP_DIR, phenoFile) : null,
-            cohortFilePath: cohortFile ? path.join(TEMP_DIR, cohortFile) : null
-        });
-    } catch (error) {
-        res.status(500).json({ error: 'File upload failed' });
-    }
-});
-
-app.post('/api/phetk/run', (req, res) => {
-    const { step, args } = req.body;
-    
-    if (!step || !args) {
-        return res.status(400).json({ error: 'Missing step or args' });
-    }
-
-    const pythonCmd = process.platform === 'win32' ? 'py' : 'python3';
-    const pipelineScript = path.join(__dirname, 'phetk_pipeline.py');
-    
-    // Construct command line arguments
-    let spawnArgs = [pipelineScript, step];
-    for (const [key, value] of Object.entries(args)) {
-        if (value !== undefined && value !== null && value !== '') {
-            spawnArgs.push(`--${key}`);
-            spawnArgs.push(value);
-        }
-    }
-
-    const pythonProcess = spawn(pythonCmd, spawnArgs, { cwd: TEMP_DIR });
-
-    let stdout = '';
-    let stderr = '';
-
-    pythonProcess.stdout.on('data', (data) => {
-        stdout += data.toString();
-    });
-
-    pythonProcess.stderr.on('data', (data) => {
-        stderr += data.toString();
-    });
-
-    pythonProcess.on('close', (code) => {
-        if (code !== 0) {
-            return res.status(500).json({ error: 'Pipeline failed', details: stderr || stdout });
-        }
-        
-        // For plot step, return the relative image URL
-        let imageUrl = null;
-        if (step === 'plot' && args['output-file']) {
-            imageUrl = `/temp/${path.basename(args['output-file'])}`;
-        }
-        
-        res.json({
-            success: true,
-            stdout: stdout,
-            imageUrl: imageUrl
-        });
-    });
-});
 
 app.listen(port, () => {
     console.log(`Backend server listening at http://localhost:${port}`);
