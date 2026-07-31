@@ -12,6 +12,8 @@ const Header = ({ isDark, setIsDark }) => {
       <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
         <SoundLink to="/">Home</SoundLink>
         <SoundLink to="/learn" className="nav-link">Learn Python</SoundLink>
+        <SoundLink to="/dashboard" className="nav-link">EHR Dashboard</SoundLink>
+        <SoundLink to="/phetk-wizard" className="nav-link" style={{ background: 'var(--accent-gradient)', color: 'white', padding: '0.5rem 1rem', borderRadius: '999px' }}>PheTK Wizard</SoundLink>
         
         <SoundButton 
           onClick={() => setIsDark(!isDark)} 

@@ -30,6 +30,13 @@ const stages = [
     description: "The viewer executes the script directly in their browser. The code runs securely on our backend servers, delivering real-time terminal output.",
     cursorPosition: { top: '15%', left: '85%' },
     cursorClick: true
+  },
+  {
+    id: 'wizard',
+    title: "5. The PheTK Wizard",
+    description: "For advanced researchers, the viewer launches the PheTK Wizard. This visual tool runs massive Phenome-Wide Association Studies and generates professional Manhattan plots (colorful charts showing genetic connections) without writing any code.",
+    cursorPosition: { top: '80%', left: '50%' },
+    cursorClick: false
   }
 ];
 
@@ -79,7 +86,7 @@ const InteractiveWalkthrough = () => {
             >
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                 <span style={{ padding: '0.25rem 0.75rem', background: 'var(--accent-gradient)', color: 'white', borderRadius: '1rem', fontSize: '0.8rem', fontWeight: 'bold' }}>
-                  Step {currentStageIndex + 1} of 4
+                  Step {currentStageIndex + 1} of 5
                 </span>
               </div>
               <h3 style={{ fontSize: '2rem', margin: '0' }}>{currentStage.title}</h3>
@@ -175,6 +182,21 @@ const InteractiveWalkthrough = () => {
                   </motion.div>
                 )}
 
+                {/* Wizard State */}
+                {currentStage.id === 'wizard' && (
+                  <motion.div 
+                    key="wizard-view"
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                    style={{ padding: '2rem', height: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <Activity size={48} color="var(--accent-color)" />
+                    <h2 style={{ color: 'var(--text-primary)' }}>PheTK Wizard</h2>
+                    <div style={{ width: '80%', height: '8px', background: 'var(--border-color)', borderRadius: '4px', margin: '1rem 0', position: 'relative' }}>
+                       <div style={{ position: 'absolute', top: 0, left: 0, width: '75%', height: '100%', background: 'var(--accent-gradient)', borderRadius: '4px' }} />
+                    </div>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Generating Manhattan Plot... 75%</p>
+                  </motion.div>
+                )}
                 
               </AnimatePresence>
             </div>

@@ -85,8 +85,8 @@ const HowToUseSection = () => (
       <div className="glass-card" style={{ padding: '2rem', display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
         <div style={{ background: 'var(--accent-gradient)', color: 'white', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '1.2rem', flexShrink: 0 }}>3</div>
         <div>
-          <h3 style={{ margin: '0 0 0.5rem 0' }}>Build Applications</h3>
-          <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.6 }}>Use the interactive output console to view your code's results instantly. Build real applications right in your browser.</p>
+          <h3 style={{ margin: '0 0 0.5rem 0' }}>Run Advanced Analytics</h3>
+          <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.6 }}>Use the no-code PheTK Wizard to upload CSV files, automatically translate ICD codes, and generate professional Manhattan plots instantly.</p>
         </div>
       </div>
     </div>
@@ -113,15 +113,35 @@ const LandingPage = () => {
           </span>
         </div>
         <h1 className="hero-title">
-          Master Python <span className="text-gradient">Programming</span>
+          Master Python & <span className="text-gradient">PheWAS Analysis</span>
         </h1>
         <p className="hero-subtitle">
-          An all-in-one educational platform. 
-          Learn the fundamentals of Python programming, write scripts in a world-class editor, and build amazing projects instantly.
+          An all-in-one educational platform and professional data science suite. 
+          Learn the fundamentals of Python programming, write scripts in a world-class editor, and execute massive Phenome-Wide Association Studies instantly.
         </p>
+        
+        {/* Beginner Explanations Banner */}
+        <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '1rem', padding: '1.5rem', maxWidth: '900px', margin: '0 auto 2.5rem auto', textAlign: 'left', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
+          <div>
+            <h4 style={{ margin: '0 0 0.5rem 0', color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>💻 What is Python?</h4>
+            <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5' }}>Python is the most popular programming language for Data Science. It uses plain English words, making it the easiest language for beginners to learn!</p>
+          </div>
+          <div>
+            <h4 style={{ margin: '0 0 0.5rem 0', color: 'var(--accent-color)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>🧬 What is PheWAS?</h4>
+            <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5' }}>A <i>Phenome-Wide Association Study</i>. It lets scientists analyze if a single variable (like a gene mutation) is connected to thousands of different human illnesses.</p>
+          </div>
+          <div>
+            <h4 style={{ margin: '0 0 0.5rem 0', color: '#3b82f6', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>🏥 What is an EHR?</h4>
+            <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5' }}>An <i>Electronic Health Record</i> is the digital database that hospitals use to track patient medical histories, prescriptions, lab tests, and diagnoses.</p>
+          </div>
+        </div>
+
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
           <SoundLink to="/runner" className="btn btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>
             Open Code Editor <ChevronRight size={20} />
+          </SoundLink>
+          <SoundLink to="/phetk-wizard" className="btn btn-secondary" style={{ padding: '1rem 2rem', fontSize: '1.1rem', background: 'var(--bg-card)' }}>
+            Launch PheTK Wizard
           </SoundLink>
         </div>
       </motion.div>
@@ -140,12 +160,12 @@ const LandingPage = () => {
           <div className="feature-icon" style={{ background: 'var(--accent-gradient)' }}>
             <Activity size={24} />
           </div>
-          <h3>Interactive Challenges</h3>
+          <h3>The PheTK Wizard</h3>
           <p style={{ marginBottom: '1.5rem', lineHeight: 1.6 }}>
-            Test your knowledge with hands-on coding challenges. Write algorithms to solve problems directly in the browser and get immediate feedback on your performance.
+            Execute complex statistical biology algorithms without writing a single line of code. Our visual 4-step wizard connects directly to our Python backend to translate raw ICD codes into standardized Phecodes, perform multithreaded logistic regression, and generate beautiful Manhattan plots.
           </p>
-          <SoundLink to="/learn" className="btn" style={{ width: '100%', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
-            Start Learning
+          <SoundLink to="/phetk-wizard" className="btn" style={{ width: '100%', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
+            Start Analysis
           </SoundLink>
         </motion.div>
 
@@ -168,7 +188,7 @@ const LandingPage = () => {
           </div>
           <h3>Interactive Curriculum</h3>
           <p style={{ marginBottom: '1.5rem', lineHeight: 1.6 }}>
-            Whether you are a complete beginner to variables and loops, or a seasoned programmer looking to learn general Python programming, our Interactive Learning Center provides copy-pasteable lessons to accelerate your learning.
+            Whether you are a complete beginner to variables and loops, or a seasoned researcher looking to learn the `PheTK` Python library programmatically, our Interactive Learning Center provides copy-pasteable lessons to accelerate your learning.
           </p>
           <SoundLink to="/learn" className="btn" style={{ width: '100%', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
             View Curriculum
