@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Play, Code2, LineChart, Activity, BookOpen, ChevronRight, ShieldCheck, Cpu } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { SoundLink } from '../components/SoundButton';
+import InteractiveWalkthrough from '../components/InteractiveWalkthrough';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -62,84 +63,6 @@ const AnimatedBackground = () => (
     />
   </div>
 );
-
-const AnimatedProductDemo = () => {
-  const codeString = `import pandas as pd
-from PheTK.PheWAS import PheWAS
-
-# Running large-scale data science
-print("Initializing RoboCode Environment...")
-phewas = PheWAS(cohort_csv_path="data.csv")
-phewas.run()
-`;
-  const [typedText, setTypedText] = useState("");
-  const [showOutput, setShowOutput] = useState(false);
-
-  useEffect(() => {
-    let i = 0;
-    setShowOutput(false);
-    setTypedText("");
-    
-    const typingInterval = setInterval(() => {
-      if (i < codeString.length) {
-        setTypedText(codeString.slice(0, i + 1));
-        i++;
-      } else {
-        clearInterval(typingInterval);
-        setTimeout(() => setShowOutput(true), 600);
-      }
-    }, 40); // typing speed
-
-    return () => clearInterval(typingInterval);
-  }, []);
-
-  return (
-    <div style={{ maxWidth: '800px', margin: '4rem auto', position: 'relative', zIndex: 10 }}>
-      <motion.div 
-        className="glass-card" 
-        style={{ padding: 0, overflow: 'hidden', border: '1px solid var(--border-card)', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)' }}
-        initial={{ y: 40, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        viewport={{ once: true }}
-      >
-        {/* macOS Window Header */}
-        <div style={{ background: '#1e293b', padding: '0.75rem 1rem', display: 'flex', gap: '0.5rem', alignItems: 'center', borderBottom: '1px solid #334155' }}>
-          <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#ef4444' }} />
-          <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#eab308' }} />
-          <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#22c55e' }} />
-          <div style={{ flex: 1, textAlign: 'center', fontSize: '0.8rem', color: '#94a3b8', fontFamily: 'monospace' }}>main.py - RoboCode Editor</div>
-        </div>
-        
-        {/* Editor Body */}
-        <div style={{ padding: '1.5rem', background: '#0f172a', color: '#f8fafc', fontFamily: 'monospace', fontSize: '0.9rem', minHeight: '200px', textAlign: 'left' }}>
-          <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
-            <span style={{ color: '#38bdf8' }}>{typedText}</span>
-            <motion.span 
-              animate={{ opacity: [1, 0] }} 
-              transition={{ repeat: Infinity, duration: 0.8 }}
-              style={{ display: 'inline-block', width: '8px', height: '15px', background: '#f8fafc', verticalAlign: 'middle', marginLeft: '2px' }}
-            />
-          </pre>
-        </div>
-
-        {/* Terminal Output */}
-        {showOutput && (
-          <motion.div 
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            style={{ padding: '1rem 1.5rem', background: '#020617', borderTop: '1px solid #334155', color: '#a7f3d0', fontFamily: 'monospace', fontSize: '0.85rem', textAlign: 'left' }}
-          >
-            &gt; Initializing RoboCode Environment...<br/>
-            &gt; Loading cohort data (n=14,200)...<br/>
-            &gt; Running PheWAS mapping... [DONE]<br/>
-            &gt; Executing logistic regression... [DONE]<br/>
-            &gt; Generating Manhattan Plot... SUCCESS!
-          </motion.div>
-        )}
-      </motion.div>
-    </div>
-  );
-};
 
 const HowToUseSection = () => (
   <div style={{ maxWidth: '800px', margin: '4rem auto', padding: '0 2rem' }}>
@@ -206,7 +129,7 @@ const LandingPage = () => {
         </div>
       </motion.div>
 
-      <AnimatedProductDemo />
+      <InteractiveWalkthrough />
 
       {/* Services Grid */}
       <motion.div 
