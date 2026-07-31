@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Upload, ArrowRight, Play, BarChart2, Activity, CheckCircle2, Loader2, Image as ImageIcon } from 'lucide-react';
 import { api, getBaseUrl } from '../services/api';
 import { SoundButton } from '../components/SoundButton';
+import PheTKWalkthrough from '../components/PheTKWalkthrough';
 
 const PheTKWizardPage = () => {
   const [step, setStep] = useState(1);
@@ -261,6 +262,63 @@ const PheTKWizardPage = () => {
           <pre style={{ flex: 1, margin: 0, padding: 0, background: 'transparent', color: '#a7f3d0', overflowY: 'auto', whiteSpace: 'pre-wrap', fontFamily: 'monospace' }}>
             {logs || 'Waiting for pipeline to start...'}
           </pre>
+        </div>
+      </div>
+
+      {/* Interactive Walkthrough Demo */}
+      <div style={{ marginTop: '5rem' }}>
+        <PheTKWalkthrough />
+      </div>
+
+      {/* Programmatic Python Usage */}
+      <div style={{ marginTop: '5rem', padding: '3rem 2rem', background: 'var(--bg-secondary)', borderRadius: '1rem', border: '1px solid var(--border-color)' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '1rem', fontSize: '2.5rem' }}>Use PheTK with <span className="text-gradient">Pure Python</span></h2>
+        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', maxWidth: '800px', margin: '0 auto 3rem auto', fontSize: '1.1rem', lineHeight: '1.6' }}>
+          Are you an advanced researcher who prefers writing code? You can run the entire PheTK pipeline programmatically using Python! Copy these scripts and paste them into our built-in Code Editor to run them securely in your browser.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+          
+          <div className="glass-card" style={{ padding: '2rem' }}>
+            <h3 style={{ color: 'var(--accent-color)' }}>1. Generate Demo Data</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1rem' }}>Create synthetic CSV files if you don't have your own patient data.</p>
+            <pre style={{ background: '#0f172a', padding: '1rem', borderRadius: '0.5rem', color: '#38bdf8', fontSize: '0.8rem', overflowX: 'auto', border: '1px solid #334155' }}>
+{`from PheTK.Demo import generate_examples
+
+# Generates phenotype and cohort files
+generate_examples(num_patients=5000)`}
+            </pre>
+          </div>
+
+          <div className="glass-card" style={{ padding: '2rem' }}>
+            <h3 style={{ color: 'var(--accent-color)' }}>2. Run the PheWAS Pipeline</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1rem' }}>Map codes, run regression stats, and save the results in just 3 lines of code.</p>
+            <pre style={{ background: '#0f172a', padding: '1rem', borderRadius: '0.5rem', color: '#38bdf8', fontSize: '0.8rem', overflowX: 'auto', border: '1px solid #334155' }}>
+{`from PheTK.PheWAS import PheWAS
+
+engine = PheWAS('pheno.csv', 'cohort.csv')
+engine.map_codes()
+engine.run_regression(indep_var='mutation')`}
+            </pre>
+          </div>
+
+          <div className="glass-card" style={{ padding: '2rem' }}>
+            <h3 style={{ color: 'var(--accent-color)' }}>3. Generate Manhattan Plot</h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1rem' }}>Pass your results directly into the plotter to visualize significant diseases.</p>
+            <pre style={{ background: '#0f172a', padding: '1rem', borderRadius: '0.5rem', color: '#38bdf8', fontSize: '0.8rem', overflowX: 'auto', border: '1px solid #334155' }}>
+{`from PheTK.Plot import ManhattanPlot
+
+# Reads the generated stats and plots
+ManhattanPlot('phewas_results.csv').save()`}
+            </pre>
+          </div>
+
+        </div>
+
+        <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+          <a href="/runner" className="btn btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem', textDecoration: 'none' }}>
+            Open Code Editor to Try It
+          </a>
         </div>
       </div>
     </div>
