@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { BookOpen, Copy, CheckCircle2, ChevronRight, Play } from 'lucide-react';
-import { SoundButton } from '../components/SoundButton';
-import { Link } from 'react-router-dom';
+import { BookOpen, Copy, CheckCircle2, ChevronRight, Play, Lightbulb } from 'lucide-react';
+import { SoundButton, SoundLink } from '../components/SoundButton';
 
 const CodeSnippet = ({ title, code }) => {
   const [copied, setCopied] = useState(false);
@@ -55,9 +54,9 @@ const LearnPage = () => {
       </div>
 
       <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '3rem' }}>
-        <Link to="/runner" className="btn btn-primary">
+        <SoundLink to="/runner" className="btn btn-primary">
           <Play size={18} /> Open Editor to Practice
-        </Link>
+        </SoundLink>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '3rem' }}>
@@ -71,7 +70,7 @@ const LearnPage = () => {
               background: activeLesson === index ? 'var(--bg-secondary)' : 'transparent',
               border: '1px solid',
               borderColor: activeLesson === index ? 'var(--accent-color)' : 'transparent',
-              borderRadius: '0.5rem',
+              borderRadius: '999px',
               color: activeLesson === index ? 'var(--accent-color)' : 'var(--text-primary)',
               display: 'flex',
               alignItems: 'center',
@@ -87,6 +86,40 @@ const LearnPage = () => {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+          <Lightbulb color="var(--accent-color)" />
+          <h2 style={{ margin: 0 }}>1. Hello World & Math</h2>
+        </div>
+        <p style={{ color: 'var(--text-secondary)' }}>
+          Python is great for simple math and printing text to the screen.
+        </p>
+        <CodeSnippet 
+          title="Print and Math" 
+          code={`# Let's print a message
+print("Hello from RoboCode!")
+
+# Math is easy in Python
+x = 10
+y = 5
+print(f"10 plus 5 is {x + y}")`}
+        />
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+          <Lightbulb color="var(--accent-color)" />
+          <h2 style={{ margin: 0 }}>2. Variables and Lists</h2>
+        </div>
+        <p style={{ color: 'var(--text-secondary)' }}>
+          You can store data in variables and create lists of items.
+        </p>
+        <CodeSnippet 
+          title="Working with Lists" 
+          code={`# Create a list of planets
+planets = ["Earth", "Mars", "Jupiter"]
+
+# Add a new planet
+planets.append("Saturn")
+
 # Loop through the list
 for planet in planets:
     print(f"Welcome to {planet}!")`}
@@ -116,6 +149,7 @@ df = pd.DataFrame(data)
 # Put the variable at the end to render it beautifully!
 df`}
         />
+
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
           <Lightbulb color="var(--accent-color)" />
           <h2 style={{ margin: 0 }}>4. Advanced: PheWAS Analysis (PheTK)</h2>
@@ -166,7 +200,7 @@ top_results`}
         />
       </div>
 
-      <div style={{ textAlign: 'center', marginTop: '4rem', padding: '2rem', background: 'rgba(255,255,255,0.5)', borderRadius: '1rem' }}>
+      <div style={{ textAlign: 'center', marginTop: '4rem', padding: '2rem', background: 'var(--bg-card)', borderRadius: '1rem' }}>
         <img src="/robot.png" alt="Robot" style={{ width: '80px', animation: 'floatSmall 4s ease-in-out infinite', filter: 'drop-shadow(var(--glow))' }} />
         <h3>Ready to build amazing things?</h3>
         <p style={{ color: 'var(--text-secondary)' }}>Head over to the Script Runner and let your imagination run wild.</p>
