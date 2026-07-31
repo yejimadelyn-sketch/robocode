@@ -233,10 +233,10 @@ app.post('/api/phetk/run', (req, res) => {
             return res.status(500).json({ error: 'Pipeline failed', details: stderr || stdout });
         }
         
-        // For plot step, return the image URL
+        // For plot step, return the relative image URL
         let imageUrl = null;
         if (step === 'plot' && args['output-file']) {
-            imageUrl = `http://localhost:3001/temp/${path.basename(args['output-file'])}`;
+            imageUrl = `/temp/${path.basename(args['output-file'])}`;
         }
         
         res.json({

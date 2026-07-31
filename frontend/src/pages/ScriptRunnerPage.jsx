@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Play, SquareTerminal, Image as ImageIcon, Loader2, Bot, X, Send } from 'lucide-react';
 import Editor from '@monaco-editor/react';
 import toast from 'react-hot-toast';
+import { api, getBaseUrl } from '../services/api';
 
 const ScriptRunnerPage = () => {
   const [code, setCode] = useState('# Write or paste your Python code here\nprint("Hello from Python!")\n');
@@ -28,18 +29,7 @@ const ScriptRunnerPage = () => {
     setChatMessage('');
     
     try {
-      const response = await fetch('http://localhost:3001/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: chatMessage,
-          chatHistory: chatHistory, // Send previous history without the new message
-          code: code,
-          errorLogs: errorLogs
-        })
-      });
-
-      const data = await response.json();
+      const data = await api.sendChatMessage(chatMessage, chatHistory, code, errorLogs);
       
       if (data.reply) {
         setChatHistory(prev => [...prev, { role: 'assistant', content: data.reply }]);
@@ -59,15 +49,7 @@ const ScriptRunnerPage = () => {
     setHtmlOutput('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/run-script', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ code }),
-      });
-
-      const data = await response.json();
+      const data = await api.runScript(code);
       
       if (data.stdout) {
         setLogs(data.stdout);
@@ -79,7 +61,9 @@ const ScriptRunnerPage = () => {
       }
       if (data.html) setHtmlOutput(data.html);
       if (data.images && data.images.length > 0) {
-        setImages(data.images);
+        // Resolve images to absolute URLs relative to the API
+        const absoluteImages = data.images.map(img => img.startsWith('http') ? img : getBaseUrl() + img);
+        setImages(absoluteImages);
         toast.success(`Generated ${data.images.length} plot(s)!`);
       }
     } catch (error) {

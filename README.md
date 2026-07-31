@@ -14,15 +14,19 @@ To run this project on your own machine, you must have the following installed:
 2. [Python](https://www.python.org/downloads/) (v3.8 or higher)
 3. A Google Gemini API Key
 
-## Installation & Setup
+## How to Download and Use
 
-1. **Clone the repository:**
+Follow these exact steps to download the code to your computer and start using RoboCode immediately!
+
+1. **Download the Code:**
+   Open your terminal and run the following command to download this repository to your computer:
    ```bash
    git clone https://github.com/yejimadelyn-sketch/robocode.git
    cd robocode
    ```
 
-2. **Setup the Backend (Node.js & Python):**
+2. **Setup the Backend (The Engine):**
+   The backend relies on Node.js and a custom Python environment. Open a terminal inside the `backend` folder:
    ```bash
    cd backend
    npm install
@@ -30,15 +34,15 @@ To run this project on your own machine, you must have the following installed:
    # Install the required Python packages (including the custom PheTK library)
    pip install -r requirements.txt
    
-   # Set up your environment variables
+   # Setup your AI API Key
    cp .env.example .env
-   # Edit the .env file and paste in your GEMINI_API_KEY
+   # Open the .env file in a text editor and paste your GEMINI_API_KEY inside!
    ```
 
-3. **Setup the Frontend (React):**
+3. **Setup the Frontend (The Interface):**
+   The frontend is built with React. Open a **new** terminal window and run:
    ```bash
-   # Open a new terminal window
-   cd ../frontend
+   cd frontend
    npm install
    ```
 

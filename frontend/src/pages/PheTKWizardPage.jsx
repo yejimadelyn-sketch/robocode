@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, ArrowRight, Play, BarChart2, Activity, CheckCircle2, Loader2, Image as ImageIcon } from 'lucide-react';
+import { api, getBaseUrl } from '../services/api';
 
 const PheTKWizardPage = () => {
   const [step, setStep] = useState(1);
@@ -43,30 +44,17 @@ const PheTKWizardPage = () => {
         formData.append('cohortFile', cohortFile);
         
         setLogs('Uploading files to server...\n');
-        const uploadRes = await fetch('http://localhost:3001/api/phetk/upload', {
-          method: 'POST',
-          body: formData
-        });
-        const uploadData = await uploadRes.json();
+        const uploadData = await api.uploadPheTKFiles(phenoFile, cohortFile);
         if (!uploadData.success) throw new Error('Upload failed');
         
         // Run Map Step
         setLogs(prev => prev + 'Running Mapping Step...\n');
-        const mapRes = await fetch('http://localhost:3001/api/phetk/run', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            step: 'map',
-            args: {
-              'pheno-file': uploadData.phenoFilePath,
-              'id-col': idCol,
-              'icd-col': icdCol,
-              'output-file': 'mapped_pheno_counts.csv'
-            }
-          })
+        const mapData = await api.runPheTKStep('map', {
+          'pheno-file': uploadData.phenoFilePath,
+          'id-col': idCol,
+          'icd-col': icdCol,
+          'output-file': 'mapped_pheno_counts.csv'
         });
-        
-        const mapData = await mapRes.json();
         if (!mapData.success) throw new Error(mapData.details || 'Mapping failed');
         
         setLogs(prev => prev + mapData.stdout + '\nMapping complete!\n');
@@ -77,23 +65,14 @@ const PheTKWizardPage = () => {
       } else if (step === 2) {
         // Run Stats Step
         setLogs('Running Statistics Engine...\n');
-        const statsRes = await fetch('http://localhost:3001/api/phetk/run', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            step: 'stats',
-            args: {
-              'cohort-file': cohortFile,
-              'phecode-file': mappedFile,
-              'id-col': idCol,
-              'independent-var': indepVar,
-              'covariates': covariates,
-              'output-file': 'phewas_results.csv'
-            }
-          })
+        const statsData = await api.runPheTKStep('stats', {
+          'cohort-file': cohortFile,
+          'phecode-file': mappedFile,
+          'id-col': idCol,
+          'independent-var': indepVar,
+          'covariates': covariates,
+          'output-file': 'phewas_results.csv'
         });
-        
-        const statsData = await statsRes.json();
         if (!statsData.success) throw new Error(statsData.details || 'Stats failed');
         
         setLogs(prev => prev + statsData.stdout + '\nStatistics complete!\n');
@@ -102,23 +81,15 @@ const PheTKWizardPage = () => {
       } else if (step === 3) {
         // Run Plot Step
         setLogs('Generating Manhattan Plot...\n');
-        const plotRes = await fetch('http://localhost:3001/api/phetk/run', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            step: 'plot',
-            args: {
-              'stats-file': statsFile,
-              'output-file': 'manhattan_plot.png'
-            }
-          })
+        const plotData = await api.runPheTKStep('plot', {
+          'stats-file': statsFile,
+          'output-file': 'manhattan_plot.png'
         });
-        
-        const plotData = await plotRes.json();
         if (!plotData.success) throw new Error(plotData.details || 'Plotting failed');
         
         setLogs(prev => prev + plotData.stdout + '\nPlotting complete!\n');
-        setPlotUrl(plotData.imageUrl);
+        // Combine base URL with relative image path
+        setPlotUrl(getBaseUrl() + plotData.imageUrl);
       }
       
       setStep(prev => prev + 1);
