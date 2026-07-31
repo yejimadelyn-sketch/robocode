@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Upload, ArrowRight, Play, BarChart2, Activity, CheckCircle2, Loader2, Image as ImageIcon } from 'lucide-react';
 import { api, getBaseUrl } from '../services/api';
+import { SoundButton } from '../components/SoundButton';
 
 const PheTKWizardPage = () => {
   const [step, setStep] = useState(1);
@@ -216,24 +217,28 @@ const PheTKWizardPage = () => {
             </div>
           )}
 
-          <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end' }}>
-            {step < 4 && (
-              <button 
-                className="btn btn-primary" 
-                onClick={handleNextStep} 
-                disabled={loading}
-                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-              >
-                {loading ? <Loader2 size={18} className="spin" /> : <ArrowRight size={18} />}
-                {loading ? 'Processing...' : `Run Step ${step} & Proceed`}
-              </button>
-            )}
-            {step === 4 && (
-              <button className="btn btn-primary" onClick={() => {setStep(1); setLogs(''); setPlotUrl('');}}>
-                Start New Analysis
-              </button>
-            )}
-          </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem' }}>
+          <SoundButton 
+            className="btn btn-secondary" 
+            onClick={() => setStep(prev => Math.max(1, prev - 1))}
+            disabled={step === 1 || loading}
+          >
+            Back
+          </SoundButton>
+          <SoundButton 
+            className="btn btn-primary" 
+            onClick={handleNextStep}
+            disabled={loading || (step === 4)}
+            style={{ minWidth: '150px' }}
+          >
+            {loading ? <Loader2 size={18} className="animate-spin" /> : 
+             step === 1 ? 'Upload & Map' : 
+             step === 2 ? 'Run PheWAS' : 
+             step === 3 ? 'Generate Plot' : 'Finished'}
+            {!loading && step < 4 && <ArrowRight size={18} />}
+          </SoundButton>
+        </div>
+
         </div>
 
         {/* Right Column: Terminal Logs */}

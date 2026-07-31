@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Play, Code2, LineChart, Activity, BookOpen, ChevronRight, ShieldCheck, Cpu } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { SoundLink } from '../components/SoundButton';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -46,12 +46,12 @@ const LandingPage = () => {
           Learn the fundamentals of Python programming, write scripts in a world-class editor, and execute massive Phenome-Wide Association Studies instantly.
         </p>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <Link to="/runner" className="btn btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>
+          <SoundLink to="/runner" className="btn btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }}>
             Open Code Editor <ChevronRight size={20} />
-          </Link>
-          <Link to="/phetk-wizard" className="btn btn-secondary" style={{ padding: '1rem 2rem', fontSize: '1.1rem', background: 'var(--bg-card)' }}>
+          </SoundLink>
+          <SoundLink to="/phetk-wizard" className="btn btn-secondary" style={{ padding: '1rem 2rem', fontSize: '1.1rem', background: 'var(--bg-card)' }}>
             Launch PheTK Wizard
-          </Link>
+          </SoundLink>
         </div>
       </motion.div>
 
@@ -71,9 +71,9 @@ const LandingPage = () => {
           <p style={{ marginBottom: '1.5rem', lineHeight: 1.6 }}>
             Execute complex statistical biology algorithms without writing a single line of code. Our visual 4-step wizard connects directly to our Python backend to translate raw ICD codes into standardized Phecodes, perform multithreaded logistic regression, and generate beautiful Manhattan plots.
           </p>
-          <Link to="/phetk-wizard" className="btn" style={{ width: '100%', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
+          <SoundLink to="/phetk-wizard" className="btn" style={{ width: '100%', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
             Start Analysis
-          </Link>
+          </SoundLink>
         </motion.div>
 
         <motion.div className="glass-card feature-card" variants={itemVariants} style={{ borderTop: '4px solid #3b82f6' }}>
@@ -84,9 +84,9 @@ const LandingPage = () => {
           <p style={{ marginBottom: '1.5rem', lineHeight: 1.6 }}>
             Our web-based Code Editor is powered by the exact same engine as VS Code. It features real-time syntax highlighting, intelligent auto-complete, and a built-in AI debugging assistant to help you learn Python faster and write better scripts.
           </p>
-          <Link to="/runner" className="btn" style={{ width: '100%', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
+          <SoundLink to="/runner" className="btn" style={{ width: '100%', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
             Launch Editor
-          </Link>
+          </SoundLink>
         </motion.div>
 
         <motion.div className="glass-card feature-card" variants={itemVariants} style={{ borderTop: '4px solid #10b981' }}>
@@ -97,9 +97,9 @@ const LandingPage = () => {
           <p style={{ marginBottom: '1.5rem', lineHeight: 1.6 }}>
             Whether you are a complete beginner to variables and loops, or a seasoned researcher looking to learn the `PheTK` Python library programmatically, our Interactive Learning Center provides copy-pasteable lessons to accelerate your learning.
           </p>
-          <Link to="/learn" className="btn" style={{ width: '100%', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
+          <SoundLink to="/learn" className="btn" style={{ width: '100%', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>
             View Curriculum
-          </Link>
+          </SoundLink>
         </motion.div>
       </motion.div>
     </div>

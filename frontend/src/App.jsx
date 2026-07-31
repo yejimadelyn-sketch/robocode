@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Moon, Sun } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
+import { SoundLink, SoundButton } from './components/SoundButton';
 import LandingPage from './pages/LandingPage';
 import ScriptRunnerPage from './pages/ScriptRunnerPage';
 import LearnPage from './pages/LearnPage';
@@ -30,26 +31,26 @@ function App() {
           } 
         }} />
         <nav className="navbar">
-          <Link to="/" className="nav-brand">
+          <SoundLink to="/" className="nav-brand">
             <img src="/robot.png" alt="RoboCode Logo" style={{ width: '36px', height: '36px', animation: 'spin 10s linear infinite' }} />
             <span className="text-gradient">RoboCode</span>
-          </Link>
+          </SoundLink>
           <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <Link to="/">Home</Link>
-            <Link to="/learn" className="nav-link">Learn Python</Link>
-            <Link to="/phetk-wizard" className="nav-link" style={{ background: 'var(--accent-gradient)', color: 'white', padding: '0.5rem 1rem', borderRadius: '2rem' }}>PheTK Wizard</Link>
+            <SoundLink to="/">Home</SoundLink>
+            <SoundLink to="/learn" className="nav-link">Learn Python</SoundLink>
+            <SoundLink to="/phetk-wizard" className="nav-link" style={{ background: 'var(--accent-gradient)', color: 'white', padding: '0.5rem 1rem', borderRadius: '999px' }}>PheTK Wizard</SoundLink>
             
-            <button 
+            <SoundButton 
               onClick={() => setIsDark(!isDark)} 
               style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', padding: '0.5rem' }}
               title="Toggle Dark Mode"
             >
               {isDark ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
+            </SoundButton>
 
-            <Link to="/runner" className="btn btn-primary" style={{ padding: '0.5rem 1rem', color: 'white' }}>
+            <SoundLink to="/runner" className="btn btn-primary" style={{ padding: '0.5rem 1.25rem', color: 'white' }}>
               Launch Editor
-            </Link>
+            </SoundLink>
           </div>
         </nav>
         

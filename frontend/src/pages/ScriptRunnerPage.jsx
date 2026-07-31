@@ -3,6 +3,7 @@ import { Play, SquareTerminal, Image as ImageIcon, Loader2, Bot, X, Send } from 
 import Editor from '@monaco-editor/react';
 import toast from 'react-hot-toast';
 import { api, getBaseUrl } from '../services/api';
+import { SoundButton } from '../components/SoundButton';
 
 const ScriptRunnerPage = () => {
   const [code, setCode] = useState('# Write or paste your Python code here\nprint("Hello from Python!")\n');
@@ -80,7 +81,7 @@ const ScriptRunnerPage = () => {
       <div className="panel">
         <div className="panel-header">
           <h2><SquareTerminal size={20} /> Python Editor</h2>
-          <button 
+          <SoundButton 
             className="btn btn-primary" 
             onClick={handleRunScript}
             disabled={isLoading}
@@ -88,7 +89,7 @@ const ScriptRunnerPage = () => {
           >
             {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Play size={16} />}
             {isLoading ? 'Running...' : 'Run Script'}
-          </button>
+          </SoundButton>
         </div>
         <div className="panel-body" style={{ padding: 0 }}>
           <Editor
@@ -189,9 +190,9 @@ const ScriptRunnerPage = () => {
                 <Bot size={20} />
                 <span style={{ fontWeight: 600 }}>AI Assistant</span>
               </div>
-              <button onClick={() => setShowChat(false)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}>
+              <SoundButton onClick={() => setShowChat(false)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}>
                 <X size={20} />
-              </button>
+              </SoundButton>
             </div>
             
             <div style={{ flex: 1, padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem', background: 'rgba(255,255,255,0.8)' }}>
@@ -219,14 +220,14 @@ const ScriptRunnerPage = () => {
                 placeholder="Ask for help..." 
                 style={{ flex: 1, padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)', outline: 'none' }}
               />
-              <button type="submit" className="btn btn-primary" style={{ padding: '0.5rem', borderRadius: '0.5rem' }}>
+              <SoundButton type="submit" className="btn btn-primary" style={{ padding: '0.5rem', borderRadius: '0.5rem' }}>
                 <Send size={18} />
-              </button>
+              </SoundButton>
             </form>
           </div>
         )}
 
-        <button 
+        <SoundButton 
           onClick={() => setShowChat(!showChat)}
           style={{ 
             width: '60px', 
@@ -247,7 +248,7 @@ const ScriptRunnerPage = () => {
           onMouseOut={(e) => e.currentTarget.style.transform = showChat ? 'scale(0.9)' : 'scale(1)'}
         >
           {showChat ? <X size={28} /> : <Bot size={28} />}
-        </button>
+        </SoundButton>
       </div>
     </div>
   );

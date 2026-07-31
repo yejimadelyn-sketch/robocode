@@ -1,26 +1,45 @@
-import React from 'react';
-import { BookOpen, Code, Lightbulb, Play } from 'lucide-react';
+import React, { useState } from 'react';
+import { BookOpen, Copy, CheckCircle2, ChevronRight, Play } from 'lucide-react';
+import { SoundButton } from '../components/SoundButton';
 import { Link } from 'react-router-dom';
 
-const CodeSnippet = ({ title, code }) => (
-  <div className="glass-card" style={{ padding: '1.5rem', marginBottom: '2rem' }}>
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-      <h3 style={{ margin: 0, color: 'var(--accent-color)' }}>{title}</h3>
-      <button 
-        className="btn btn-secondary" 
-        style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
-        onClick={() => navigator.clipboard.writeText(code)}
-      >
-        <Code size={14} /> Copy
-      </button>
+const CodeSnippet = ({ title, code }) => {
+  const [copied, setCopied] = useState(false);
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="glass-card" style={{ padding: 0, marginBottom: '2rem', overflow: 'hidden' }}>
+      <div style={{ padding: '0.5rem 1rem', background: '#334155', borderBottom: '1px solid #475569', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h3 style={{ margin: 0, fontSize: '0.9rem', color: '#f1f5f9' }}>{title}</h3>
+        <SoundButton 
+          onClick={copyToClipboard}
+          style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.8rem' }}
+        >
+          {copied ? <CheckCircle2 size={14} color="#10b981" /> : <Copy size={14} />}
+          {copied ? 'Copied!' : 'Copy'}
+        </SoundButton>
+      </div>
+      <div className="code-editor" style={{ background: 'rgba(255,255,255,0.8)', padding: '1rem', overflowX: 'auto' }}>
+        <pre style={{ margin: 0, fontFamily: 'monospace' }}>{code}</pre>
+      </div>
     </div>
-    <div className="code-editor" style={{ background: 'rgba(255,255,255,0.8)', padding: '1rem', borderRadius: '8px', minHeight: 'auto', pointerEvents: 'none' }}>
-      <pre style={{ margin: 0 }}>{code}</pre>
-    </div>
-  </div>
-);
+  );
+};
 
 const LearnPage = () => {
+  const [activeLesson, setActiveLesson] = useState(0);
+
+  const lessons = [
+    { title: "1. Hello World & Math" },
+    { title: "2. Variables and Lists" },
+    { title: "3. Data Science with Pandas" },
+    { title: "4. Advanced: PheWAS Analysis (PheTK)" }
+  ];
+
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '3rem 2rem' }}>
       <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
@@ -41,40 +60,33 @@ const LearnPage = () => {
         </Link>
       </div>
 
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '3rem' }}>
+        {lessons.map((lesson, index) => (
+          <SoundButton
+            key={index}
+            onClick={() => setActiveLesson(index)}
+            style={{
+              padding: '1rem',
+              textAlign: 'left',
+              background: activeLesson === index ? 'var(--bg-secondary)' : 'transparent',
+              border: '1px solid',
+              borderColor: activeLesson === index ? 'var(--accent-color)' : 'transparent',
+              borderRadius: '0.5rem',
+              color: activeLesson === index ? 'var(--accent-color)' : 'var(--text-primary)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <span style={{ fontWeight: activeLesson === index ? 600 : 400 }}>{lesson.title}</span>
+            {activeLesson === index && <ChevronRight size={16} />}
+          </SoundButton>
+        ))}
+      </div>
+
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-          <Lightbulb color="var(--accent-color)" />
-          <h2 style={{ margin: 0 }}>1. Hello World & Math</h2>
-        </div>
-        <p style={{ color: 'var(--text-secondary)' }}>
-          Python is great for simple math and printing text to the screen.
-        </p>
-        <CodeSnippet 
-          title="Print and Math" 
-          code={`# Let's print a message
-print("Hello from RoboCode!")
-
-# Math is easy in Python
-x = 10
-y = 5
-print(f"10 plus 5 is {x + y}")`}
-        />
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-          <Lightbulb color="var(--accent-color)" />
-          <h2 style={{ margin: 0 }}>2. Variables and Lists</h2>
-        </div>
-        <p style={{ color: 'var(--text-secondary)' }}>
-          You can store data in variables and create lists of items.
-        </p>
-        <CodeSnippet 
-          title="Working with Lists" 
-          code={`# Create a list of planets
-planets = ["Earth", "Mars", "Jupiter"]
-
-# Add a new planet
-planets.append("Saturn")
-
 # Loop through the list
 for planet in planets:
     print(f"Welcome to {planet}!")`}
