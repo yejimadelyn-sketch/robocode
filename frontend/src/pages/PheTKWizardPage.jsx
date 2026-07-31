@@ -29,6 +29,27 @@ const PheTKWizardPage = () => {
     setFile(e.target.files[0]);
   };
 
+  const downloadSampleFile = (type) => {
+    let content = '';
+    let filename = '';
+    if (type === 'pheno') {
+      filename = 'sample_phenotype_ICD.csv';
+      content = 'person_id,ICD\\nP-1001,250.0\\nP-1001,401.1\\nP-1002,250.0\\nP-1003,401.1\\nP-1004,272.0\\nP-1005,250.0\\nP-1006,401.1\\nP-1007,272.0\\nP-1008,250.0';
+    } else {
+      filename = 'sample_cohort_demographics.csv';
+      content = 'person_id,age,sex,independent_variable_of_interest\\nP-1001,45,M,1\\nP-1002,52,F,0\\nP-1003,61,F,1\\nP-1004,39,M,1\\nP-1005,50,F,0\\nP-1006,48,M,1\\nP-1007,55,F,0\\nP-1008,44,M,1';
+    }
+    const blob = new Blob([content], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const handleNextStep = async () => {
     setError('');
     setLoading(true);
@@ -161,65 +182,96 @@ const PheTKWizardPage = () => {
           {step === 1 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               <h3>1. Data & Configuration</h3>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Upload your raw patient phenotypes (ICD codes) and your cohort data.</p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Upload your patient phenotypes and cohort data. Don't have data? Use the buttons below to download our sample files!</p>
               
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontWeight: 600 }}>Phenotype Data (CSV/TSV)</label>
-                <input type="file" accept=".csv,.tsv" onChange={(e) => handleFileUpload(e, setPhenoFile)} style={{ padding: '0.5rem', border: '1px solid var(--border-color)', borderRadius: '0.5rem' }} />
+              {/* Phenotype File Section */}
+              <div style={{ padding: '1rem', background: 'var(--bg-secondary)', borderRadius: '0.5rem', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+                  <label style={{ fontWeight: 600, color: 'var(--text-primary)' }}>Phenotype Data (CSV/TSV)</label>
+                  <SoundButton onClick={() => downloadSampleFile('pheno')} style={{ background: '#3b82f6', color: 'white', border: 'none', padding: '0.4rem 0.8rem', borderRadius: '0.4rem', cursor: 'pointer', fontSize: '0.8rem' }}>
+                    📥 Download Sample Phenotypes
+                  </SoundButton>
+                </div>
+                <input type="file" accept=".csv,.tsv" onChange={(e) => handleFileUpload(e, setPhenoFile)} style={{ padding: '0.5rem', border: '1px solid var(--border-color)', borderRadius: '0.5rem', color: 'var(--text-primary)' }} />
+                {phenoFile && (
+                  <div style={{ background: 'rgba(16, 185, 129, 0.15)', borderLeft: '4px solid #10b981', padding: '0.75rem', borderRadius: '0.4rem', color: 'var(--text-primary)', fontSize: '0.9rem', lineHeight: '1.5' }}>
+                    <strong>🎉 Great job! You just uploaded the Phenotype file!</strong> That file shows the medical conditions and hospital billing diagnosis codes (ICD codes) for your patients. Now, please download and upload the Cohort Demographic file right below!
+                  </div>
+                )}
               </div>
               
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontWeight: 600 }}>Genotype / Cohort Data (CSV/TSV)</label>
-                <input type="file" accept=".csv,.tsv" onChange={(e) => handleFileUpload(e, setCohortFile)} style={{ padding: '0.5rem', border: '1px solid var(--border-color)', borderRadius: '0.5rem' }} />
+              {/* Cohort File Section */}
+              <div style={{ padding: '1rem', background: 'var(--bg-secondary)', borderRadius: '0.5rem', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+                  <label style={{ fontWeight: 600, color: 'var(--text-primary)' }}>Genotype / Cohort Data (CSV/TSV)</label>
+                  <SoundButton onClick={() => downloadSampleFile('cohort')} style={{ background: '#10b981', color: 'white', border: 'none', padding: '0.4rem 0.8rem', borderRadius: '0.4rem', cursor: 'pointer', fontSize: '0.8rem' }}>
+                    📥 Download Sample Cohort Data
+                  </SoundButton>
+                </div>
+                <input type="file" accept=".csv,.tsv" onChange={(e) => handleFileUpload(e, setCohortFile)} style={{ padding: '0.5rem', border: '1px solid var(--border-color)', borderRadius: '0.5rem', color: 'var(--text-primary)' }} />
+                {cohortFile && (
+                  <div style={{ background: 'rgba(59, 130, 246, 0.15)', borderLeft: '4px solid #3b82f6', padding: '0.75rem', borderRadius: '0.4rem', color: 'var(--text-primary)', fontSize: '0.9rem', lineHeight: '1.5' }}>
+                    <strong>✅ Excellent! You uploaded the Cohort file!</strong> This file shows vital demographics (like Age and Sex) as well as the genetic traits under investigation. Since both files are ready, click <strong>"Upload & Map"</strong> below!
+                  </div>
+                )}
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '0.5rem' }}>
                 <div>
-                  <label style={{ fontSize: '0.8rem', fontWeight: 600 }}>Patient ID Column</label>
-                  <input type="text" value={idCol} onChange={e => setIdCol(e.target.value)} style={{ width: '100%', padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)' }} />
+                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-primary)' }}>Patient ID Column</label>
+                  <input type="text" value={idCol} onChange={e => setIdCol(e.target.value)} style={{ width: '100%', padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }} />
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.8rem', fontWeight: 600 }}>ICD Code Column</label>
-                  <input type="text" value={icdCol} onChange={e => setIcdCol(e.target.value)} style={{ width: '100%', padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)' }} />
+                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-primary)' }}>ICD Code Column</label>
+                  <input type="text" value={icdCol} onChange={e => setIcdCol(e.target.value)} style={{ width: '100%', padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }} />
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.8rem', fontWeight: 600 }}>Independent Variable</label>
-                  <input type="text" value={indepVar} onChange={e => setIndepVar(e.target.value)} style={{ width: '100%', padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)' }} />
+                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-primary)' }}>Independent Variable</label>
+                  <input type="text" value={indepVar} onChange={e => setIndepVar(e.target.value)} style={{ width: '100%', padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }} />
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.8rem', fontWeight: 600 }}>Covariates (comma separated)</label>
-                  <input type="text" value={covariates} onChange={e => setCovariates(e.target.value)} style={{ width: '100%', padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)' }} />
+                  <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-primary)' }}>Covariates (comma separated)</label>
+                  <input type="text" value={covariates} onChange={e => setCovariates(e.target.value)} style={{ width: '100%', padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-primary)' }} />
                 </div>
               </div>
             </div>
           )}
 
           {step === 2 && (
-            <div>
-              <h3>2. Mapping Complete</h3>
-              <p>The backend has successfully translated your raw ICD codes into grouped Phecodes.</p>
-              <div style={{ padding: '1rem', background: '#f8fafc', borderRadius: '0.5rem', marginTop: '1rem' }}>
-                <strong>Output:</strong> {mappedFile}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <h3 style={{ margin: 0 }}>2. Mapping Complete</h3>
+              <div style={{ background: 'rgba(16, 185, 129, 0.15)', borderLeft: '4px solid #10b981', padding: '1rem', borderRadius: '0.5rem', color: 'var(--text-primary)', lineHeight: '1.5' }}>
+                <strong>✨ Fantastic! Step 2 is Complete.</strong><br/>
+                We just took all those messy hospital billing codes and organized them into professional research categories called <strong>Phecodes</strong>. Now press <strong>"Run PheWAS"</strong> below to calculate the statistical connections!
+              </div>
+              <div style={{ padding: '1rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '0.5rem', color: 'var(--text-primary)' }}>
+                <strong>Generated File:</strong> {mappedFile}
               </div>
             </div>
           )}
 
           {step === 3 && (
-            <div>
-              <h3>3. Statistics & Regression Complete</h3>
-              <p>Thousands of multithreaded logistic regressions have been executed.</p>
-              <div style={{ padding: '1rem', background: '#f8fafc', borderRadius: '0.5rem', marginTop: '1rem' }}>
-                <strong>Output:</strong> {statsFile}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <h3 style={{ margin: 0 }}>3. Statistics & Regression Complete</h3>
+              <div style={{ background: 'rgba(59, 130, 246, 0.15)', borderLeft: '4px solid #3b82f6', padding: '1rem', borderRadius: '0.5rem', color: 'var(--text-primary)', lineHeight: '1.5' }}>
+                <strong>🚀 Step 3 Complete! You ran multithreaded regressions!</strong><br/>
+                Our engine just evaluated thousands of complex statistical formulas across all patients to compute statistical significance (p-values). Now press <strong>"Generate Plot"</strong> to draw your Manhattan Plot!
+              </div>
+              <div style={{ padding: '1rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '0.5rem', color: 'var(--text-primary)' }}>
+                <strong>Generated File:</strong> {statsFile}
               </div>
             </div>
           )}
 
           {step === 4 && (
-            <div>
-              <h3>4. Visualization Complete</h3>
-              <p>Your Manhattan plot has been generated.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <h3 style={{ margin: 0 }}>4. Visualization Complete</h3>
+              <div style={{ background: 'rgba(220, 39, 67, 0.15)', borderLeft: '4px solid var(--accent-color)', padding: '1rem', borderRadius: '0.5rem', color: 'var(--text-primary)', lineHeight: '1.5' }}>
+                <strong>🏆 Congratulations! Your Manhattan Plot is ready!</strong><br/>
+                Every dot on this graph is a specific human disease. Dots towering above the threshold represent statistically proven connections to your independent variable!
+              </div>
               {plotUrl && (
-                <img src={plotUrl} alt="Manhattan Plot" style={{ width: '100%', marginTop: '1rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)' }} />
+                <img src={plotUrl} alt="Manhattan Plot" style={{ width: '100%', marginTop: '0.5rem', borderRadius: '0.5rem', border: '1px solid var(--border-color)' }} />
               )}
             </div>
           )}
