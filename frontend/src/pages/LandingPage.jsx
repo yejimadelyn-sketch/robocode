@@ -20,9 +20,53 @@ const itemVariants = {
   }
 };
 
+const AnimatedBackground = () => (
+  <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden', zIndex: -1, pointerEvents: 'none' }}>
+    <motion.div
+      animate={{ 
+        x: [0, 100, -100, 0], 
+        y: [0, -100, 100, 0],
+        scale: [1, 1.2, 0.9, 1]
+      }}
+      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+      style={{
+        position: 'absolute', top: '-10%', left: '-10%', width: '60vw', height: '60vw',
+        background: 'radial-gradient(circle, rgba(244,63,94,0.15) 0%, rgba(0,0,0,0) 70%)',
+        filter: 'blur(80px)', borderRadius: '50%'
+      }}
+    />
+    <motion.div
+      animate={{ 
+        x: [0, -120, 120, 0], 
+        y: [0, 120, -120, 0],
+        scale: [1, 1.3, 0.8, 1]
+      }}
+      transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+      style={{
+        position: 'absolute', bottom: '-20%', right: '-10%', width: '50vw', height: '50vw',
+        background: 'radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(0,0,0,0) 70%)',
+        filter: 'blur(80px)', borderRadius: '50%'
+      }}
+    />
+    <motion.div
+      animate={{ 
+        x: [0, 80, -80, 0], 
+        y: [0, 80, -80, 0]
+      }}
+      transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+      style={{
+        position: 'absolute', top: '40%', left: '40%', width: '40vw', height: '40vw',
+        background: 'radial-gradient(circle, rgba(16,185,129,0.1) 0%, rgba(0,0,0,0) 70%)',
+        filter: 'blur(80px)', borderRadius: '50%'
+      }}
+    />
+  </div>
+);
+
 const LandingPage = () => {
   return (
-    <div style={{ paddingBottom: '4rem' }}>
+    <div style={{ paddingBottom: '4rem', position: 'relative' }}>
+      <AnimatedBackground />
       {/* Hero Section */}
       <motion.div 
         className="hero-section"
